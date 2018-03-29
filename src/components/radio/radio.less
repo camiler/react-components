@@ -1,0 +1,68 @@
+@import "../variables";
+@import "../util";
+
+@outer-size: 16px;
+@inner-size: @outer-size / 2;
+@space: (@outer-size - @inner-size) / 2;
+
+.circleRadius{
+  -webkit-border-radius: 100%;
+  border-radius: 100%;
+}
+
+@keyframes radioAni {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.radio-wrap{
+  display: inline-block;
+  margin-right: .2rem;
+  height: @font-size-16;
+  padding: .1rem 0;
+  line-height: @font-size-16;
+  .outer{
+    vertical-align: middle;
+    display: inline-block;
+    line-height: @outer-size;
+    width: @outer-size;
+    height: @outer-size;
+    .circleRadius;
+    box-sizing: content-box;
+    border: 1px solid @color-black9;
+    position: relative;
+    &.disabled{
+      opacity: .3;
+    }
+    &.checked{
+      border: 1px solid @color-main;
+      transition: border .3s ease-in;
+      animation: radioAni .3s ease-in;
+      .inner{
+        position: absolute;
+        top: @space;
+        left: @space;
+        display: inline-block;
+        width: @inner-size;
+        height: @inner-size;
+        .circleRadius;
+        background: @color-main;
+        transition: background .3s ease-in;
+        animation: radioAni .3s ease-in;
+      }
+    }
+  }
+
+  .text{
+    vertical-align: middle;
+    margin-left: .1rem;
+    font-size: @font-size-16;
+  }
+}

@@ -1,0 +1,36 @@
+@import "../variables";
+@import "../util";
+
+.top-bar{
+  padding: .3rem .2rem;
+  line-height: .32rem;
+  text-align: center;
+  border-bottom: 1px solid @color-weak2;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 99;
+  background-color: @color-white;
+  .flex;
+  .verticalCenter;
+  span{
+    display: inline-block;
+    width: 25%;
+  }
+
+  .title{
+    color: @color-black3;
+    font-weight: bold;
+    display: inline-block;
+    font-size: @font-size-16;
+    .flexBox;
+  }
+  .back-label{
+    text-align: left;
+  }
+  .custom-text{
+    font-size: @font-size-14;
+    text-align: right;
+  }
+}

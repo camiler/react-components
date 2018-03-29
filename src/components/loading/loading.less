@@ -1,0 +1,36 @@
+@keyframes ratate {
+  0% {
+    transform: rotate(0deg) scale(0.4);
+  }
+  100% {
+    transform: rotate(360deg) scale(0.4);
+  }
+}
+.loading-wrap{
+  &.fixedMaskBg{
+    z-index: 1000;
+  }
+}
+.loading{
+  width: 120px;
+  height: 120px;
+  background: url(circle.png) no-repeat;
+  background-size: 100% 100%;
+  transform-origin: center center;
+  animation: ratate 1s linear 0s infinite;
+}
+
+//@keyframes loadingRun{
+//  to{
+//    background-position: -3275px 0;
+//  }
+//}
+//.loading{
+//  width: 120px;
+//  height: 120px;
+//  text-indent: 999px;
+//  transform: scale(0.3);
+//  overflow: hidden;
+//  background: url('./loading.png');
+//  animation: loadingRun 1s infinite steps(30);
+//}

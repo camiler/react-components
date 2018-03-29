@@ -1,0 +1,84 @@
+@import "../variables";
+
+@button-default-bg: linear-gradient(136deg, #65BCFA 0%, #59A3FF 100%);
+@button-red-bg: linear-gradient(136deg, #FF6456 0%, #E62B2B 100%);
+
+@button-fixed-yellow-bg: linear-gradient(to bottom right, #FF9D15, #ffd300);
+@button-fixed-blue-bg: linear-gradient(to bottom left, #3E84F5, #24b9ff);
+
+a.btn{
+  color: @color-white;
+}
+.btn {
+  text-align: center;
+  display: block;
+  box-sizing: border-box;
+  &.large{
+    font-size: @font-size-18;
+    width: 6.7rem;
+    height: 1rem;
+    line-height: 1rem;
+    font-weight: bold;
+    color: @color-white;
+    border-radius: .08rem;
+    &.default{
+      background-image: @button-default-bg;
+    }
+    &.pressed{
+      background-color: #4C88D7;
+    }
+    &.disabled{
+      opacity: 0.4;
+      background: #59A3FF;
+    }
+    &.red{
+      background-image: @button-red-bg;
+    }
+  }
+  &.primary{
+    font-size: @font-size-16;
+    padding: .2rem .32rem;
+    border-radius: .04rem;
+    color: @color-main;
+    border: 2px solid @color-main;
+    font-weight: bold;
+    display: inline-block;
+    &.default{
+      background-color: @color-white;
+    }
+    &.pressed{
+      background-color: rgba(89,163,255,0.40);
+    }
+    &.disabled{
+      opacity: 0.4;
+      background: #59A3FF;
+    }
+    &.red{
+      background-image: @button-red-bg;
+    }
+  }
+}
+
+.btn-bottom-fixed {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  font-size: @font-size-18;
+  font-weight: bold;
+  color: @color-white;
+  width: 100%;
+  height: 1rem;
+  line-height: 1rem;
+  &.default{
+    background-image: @button-default-bg;
+  }
+  .yellow{
+    background-image: @button-fixed-yellow-bg;
+  }
+  .blue{
+    background-image: @button-fixed-blue-bg;
+  }
+}
+

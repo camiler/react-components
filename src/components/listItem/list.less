@@ -1,0 +1,66 @@
+@import '../variables';
+@import '../util';
+@import "../icon";
+
+@padding: .4rem;
+
+.list-item{
+  margin: 0 @padding;
+  .flex;
+  .verticalCenter;
+  .text-wrap{
+    .flexBox;
+  }
+  .item-label{
+    text-align: left;
+    color: @color-black3;
+    font-size: @font-size-16;
+  }
+  .item-label-icon{
+    line-height: 1;
+    i, span{
+      display: inline-block;
+      vertical-align: middle;
+    }
+    i{
+      margin-left: 0;
+      margin-right: .2rem;
+    }
+  }
+  .item-text{
+    color: @color-black9;
+  }
+  &.double{
+    padding: .36rem 0;
+    .item-label{
+      display: block;
+      font-weight: bold;
+    }
+    .item-text{
+      font-size: @font-size-12;
+      margin-top: .08rem;
+    }
+  }
+  &.single{
+    line-height: .38rem;
+    padding: @padding 0;
+    .text-wrap{
+      .flex;
+    }
+    .item-label{
+      .flexBox;
+    }
+    .item-text{
+      .flexBox;
+      display: inline-block;
+      font-size: @font-size-14;
+      text-align: right;
+    }
+  }
+  .icon{
+    margin-left: .2rem;
+  }
+  &:last-child{
+    border-bottom: none;
+  }
+}

@@ -1,0 +1,31 @@
+.toast-panel {
+  z-index: 99999;
+  animation: fadeInOut 2.6s ease-in both;
+  .toast-content {
+    background-color: rgba(0, 0, 0, .7);
+    padding: .4rem 0.48rem;
+    min-width: 3.2rem;
+    max-width: 4.8rem;
+    font-size: .32rem;
+    color: #FFF;
+    line-height: .44rem;
+    text-align: center;
+    border-radius: .2rem;
+  }
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90%{
+    opacity: 1;
+  }
+  100%{
+    opacity:0;
+  }
+}
+

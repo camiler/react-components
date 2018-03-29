@@ -1,0 +1,56 @@
+.input-wrap{
+  width: 100%;
+  background-color: #fff;
+  height: 1rem;
+  line-height: 1rem;
+  padding: 0 .2rem;
+  position: relative;
+  .input{
+    position: absolute;
+    top: 0;
+    left: .2rem;
+    right: .2rem;
+    bottom: 0;
+    z-index: 3;
+    width: 100%;
+    opacity: 0;
+    color: transparent;
+  }
+  .show-wrap{
+    color: #333;
+    position: absolute;
+    top: 0;
+    left: .2rem;
+    right: .2rem;
+    bottom: 0;
+    z-index: 1;
+    .content{
+      display: inline-block;
+      vertical-align: middle;
+      font-size: 16px;
+    }
+    .cursor{
+      height: .5rem;
+      margin: .25rem 0;
+      width: 2px;
+      display: none;
+      vertical-align: middle;
+      background-color: #3E84F5;
+      animation: cursorAni 1.2s ease infinite;
+      &.visible{
+        display: inline-block;
+      }
+    }
+  }
+
+}
+
+@keyframes cursorAni {
+  0%, 50%{
+    opacity: 1;
+  }
+
+  60%, 100%{
+    opacity: 0;
+  }
+}
