@@ -58,4 +58,13 @@ CheckBox.propTypes = {
   style: PropTypes.object
 };
 
+CheckBox.defaultProps = {
+  checked: false,
+  disabled: false,
+  text: '',
+  id: 'checkbox',
+  style: {},
+  getValue: (obj) => {console.log(obj)}
+}
+
 export default CheckBox;

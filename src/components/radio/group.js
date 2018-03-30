@@ -53,10 +53,21 @@ RadioGroup.propTypes = {
   id: PropTypes.string,
   checkedId: PropTypes.string,
   disabled: PropTypes.bool,
-  radios: PropTypes.array,
+  radios: PropTypes.array.isRequired,
   style: PropTypes.object,
   cls: PropTypes.string,
   getValue: PropTypes.func,
 };
+
+RadioGroup.defaultProps = {
+  id: 'radioGroup',
+  checkedId: '',
+  disabled: false,
+  style: {},
+  cls: '',
+  getValue: (obj) => {
+    console.log(obj);
+  }
+}
 
 export default RadioGroup;

@@ -1,26 +1,20 @@
 @import "../variables";
-@import "../util";
 
-.alert-sec-circle {
-	stroke-dashoffset: 0;
-	stroke-dasharray: 455;
-	transition: stroke-dashoffset 1s linear
+.sms-btn{
+	background-color: @color-main;
+	color: #ffffff;
+	font-size: 14px;
+	margin-left: 20px;
+	display: inline-block;
+	text-align: center;
+	outline: none;
+	height: 36px;
+	width: 100px;
+	border-radius: 2px;
 }
-.alert-sec-text {
-	position: absolute;
-	top: .78rem;
-	left: 50%;
-	transform:translateX(-50%);
-	color: @color-black3;
-	font-size: 1rem;
-}
-.alert-sec-unit {
-	font-size: .68rem;	
-}
-.seconds-title{
-	font-size:@font-size-16;
-	color:@color-black9;
-}
-.timeout-countdown{
-	position:relative;
+
+.sms-btn[disabled],
+.sms-btn.btn-disabled {
+	color: @color-black9;
+	background: @color-weak0;
 }

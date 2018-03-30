@@ -1,5 +1,6 @@
 /**
- * 模拟光标
+ * by camiler
+ * 长数字 空格间隔 模拟光标
  */
 import React, {Component} from 'react';
 import classnames from 'classnames';
@@ -12,7 +13,8 @@ class InputCard extends Component {
     super(props)
     this.state = {
       value: '',
-      visible: false
+      visible: false,
+      placeholder: '',
     }
   }
 
@@ -22,6 +24,8 @@ class InputCard extends Component {
     this.setState({
       value: newValue
     })
+    const {getValue} = this.props;
+    if (getValue) getValue();
   }
 
   focus = () => {
@@ -31,15 +35,31 @@ class InputCard extends Component {
   }
 
   render () {
-    const {visible} = this.state;
+    const {visible, value} = this.state;
+    const {cls, borderBottom, style, placeholder} = this.props;
     return (
-      <div className="input-wrap" onClick={this.focus}>
-        <input type="tel" onKeyUp={this.handleInput} className="input"/>
-        <p className="show-wrap"><span className="content">{this.state.value}</span><span className={classnames('cursor', {visible})}></span></p>
+      <div className={classnames('input-wrap', cls, {'bor-bottom1px': borderBottom})} onClick={this.focus} style={style}>
+        <input type="tel" onKeyUp={this.handleInput} className="input" />
+        <p className="show-wrap"><span className={classnames('content', {placeholder: value === ''})}>{visible ? value : placeholder}</span><span className={classnames('cursor', {visible})}></span></p>
       </div>
     )
   }
 }
 
+InputCard.propTypes = {
+  cls: PropTypes.string,
+  borderBottom: PropTypes.bool,
+  style: PropTypes.object,
+  getValue: PropTypes.func,
+  placeholder: PropTypes.string
+}
+
+InputCard.defaultProps = {
+  cls: '',
+  borderBottom: true,
+  style: {},
+  placeholder: '请输入银行卡号',
+  getValue: (value) => {console.log(value)}
+}
 
 export default InputCard;

@@ -1,10 +1,24 @@
 .input-wrap{
-  width: 100%;
   background-color: #fff;
   height: 1rem;
   line-height: 1rem;
   padding: 0 .2rem;
   position: relative;
+  &.bor-bottom1px{
+    position: relative;
+    &::after{
+      content: " ";
+      width: 200%;
+      height: 1px;
+      position: absolute;
+      border-bottom: 1px solid #ddd;
+      transform-origin: top left;
+      transform: scale(0.5);
+      bottom: 0;
+      left: 0;
+      pointer-events: none;
+    }
+  }
   .input{
     position: absolute;
     top: 0;
@@ -28,6 +42,10 @@
       display: inline-block;
       vertical-align: middle;
       font-size: 16px;
+      &.placeholder{
+        font-size: 14px;
+        color: #ccc;
+      }
     }
     .cursor{
       height: .5rem;
