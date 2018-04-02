@@ -7,42 +7,32 @@ class Toast extends Component {
     super(options)
     this.state = {
     }
-    this.preventDocumentMove = false
   }
-  componentDidMount() {
-    document.addEventListener('touchmove', this.documentMoveHandler)
-  }
-  componentWillUnmount() {
-    document.removeEventListener('touchmove', this.documentMoveHandler)
 
-  }
-  documentMoveHandler = (evt) => {
-    if (this.preventDocumentMove) {
-      evt.preventDefault()
+  componentWillReceiveProps(nextProps) {
+    const {show, scroll} = nextProps;
+    if (!scroll) {
+      if (show) {
+        document.body.addEventListener('touchmove', this.documentMoveHandler, false);
+        document.body.addEventListener('wheel', this.documentMoveHandler, false);
+      } else {
+        document.body.removeEventListener('touchmove', this.documentMoveHandler, false);
+        document.body.removeEventListener('wheel', this.documentMoveHandler, false);
+      }
     }
   }
-  toastTouchStartHandler = (evt) => {
-    this.preventDocumentMove = true
+
+  documentMoveHandler = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
   }
-  toastTouchMoveHandler = (evt) => {
-    this.preventDocumentMove = true
-  }
-  toastTouchEndHandler = (evt) => {
-    this.preventDocumentMove = false
-  }
-  toastTouchCancelHandler = (evt) => {
-    this.preventDocumentMove = false
-  }
+
   render() {
     const {msg, show} = this.props;
     if (show) {
       return (
         <div
           className="flex boxCenter fixedMask toast-panel"
-          onTouchStart={this.toastTouchStartHandler}
-          onTouchMove={this.toastTouchMoveHandler}
-          onTouchEnd={this.toastTouchEndHandler}
-          onTouchCancel={this.toastTouchCancelHandler}
         >
           {msg ? (
             <div className="toast-content">{msg}</div>
@@ -56,12 +46,14 @@ class Toast extends Component {
 
 Toast.defaultProps = {
   msg: '弹出消息文本',
-  show: false
+  show: false,
+  scroll: false,
 };
 
 Toast.propTypes = {
   msg: PropTypes.string,
-  show: PropTypes.bool
+  show: PropTypes.bool,
+  scroll: PropTypes.bool
 };
 
 export default Toast;

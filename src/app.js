@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Button, AutoComplete, Toast, Loading, Modal, CheckBox, Countdown, CursorInput, ListItem, RadioGroup} from './components';
+import {Button, AutoComplete, Toast, Loading, Modal, CheckBox, Countdown, CursorInput, ListItem, RadioGroup, TopBar, FormItem, Select, Input} from './components';
 
 class App extends Component {
   constructor(props) {
@@ -9,7 +9,9 @@ class App extends Component {
       loading: false,
       needReset: false,
       modal: false,
-      selectId: 3
+      selectId: 3,
+      select: 'id1',
+      score: ''
     }
   }
   onSelect = (obj) => {
@@ -62,10 +64,16 @@ class App extends Component {
     });
   }
 
+  getFormItemValue = (obj) => {
+    console.log(obj);
+    this.setState(obj)
+  }
+
   render() {
-    const {toast, loading, modal, needReset, selectId} = this.state;
+    const {toast, loading, modal, needReset, selectId, select, score} = this.state;
     return (
-      <div style={{paddingBottom: '1.5rem'}}>
+      <div style={{paddingBottom: '1.5rem', paddingTop: '1rem'}}>
+        <TopBar />
         <AutoComplete list={[{id: 1, name: '东野圭吾-解忧杂货店'}, {id: 2, name: '张爱玲-红玫瑰'}, {id: 3, name: '东野圭吾-白夜行'}, {id: 4, name: '托尔斯泰-悲惨世界'}]}
                       optKey="id"
                       optName="name"
@@ -100,6 +108,28 @@ class App extends Component {
                       style={{marginRight: '0.1rem'}} />
           <RadioGroup radios={[{text: 'A', id: 'A'}, {text: 'B', id: 'B'}]} disabled checkedId="A"/>
         </div>
+
+        <FormItem label="分数"
+                  idFor="score"
+                  getValue={this.getFormItemValue}
+                  rule={[{
+                    range: [0, 100], message: `分数规则错误`,
+                  }]}
+        >
+          <Input placeholder="请输入得分" type="tel" maxLength={3} initialValue={score}/>
+        </FormItem>
+        <FormItem label="选择项"
+                  idFor="select"
+                  getValue={this.getFormItemValue}
+        >
+          <Select list={[{id: "id1", text: '数学'}, {id: "id2", text: '语文'}]}
+                  placeholder={'请选择'}
+                  optName="text"
+                  optKey="id"
+                  border={false}
+                  selectedValue={select}
+          />
+        </FormItem>
 
         <Toast msg="输入不能为空" show={toast} />
         <Loading show={loading}/>

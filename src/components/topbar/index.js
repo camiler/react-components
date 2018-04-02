@@ -16,7 +16,8 @@ const TopBar = (props) => {
 }
 
 TopBar.defaultProps = {
-  theme: 'default'
+  title: '标题',
+  back: () => {console.log('back')}
 };
 
 TopBar.propTypes = {
