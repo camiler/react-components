@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Button, AutoComplete, Toast, Loading, Modal, CheckBox, Countdown, CursorInput, ListItem, RadioGroup, TopBar, FormItem, Select, Input} from './components';
+import {Button, AutoComplete, Toast, Loading, Modal, CheckBox, Countdown, CursorInput, ListItem, RadioGroup, TopBar, FormItem, Select, Input, PayPassword} from './components';
 
 class App extends Component {
   constructor(props) {
@@ -86,6 +86,12 @@ class App extends Component {
         <Button cls="large pressed" style={{margin: '.2rem auto'}} text="show loading (large pressed)" onClick={this.showLoading}/>
         <Button cls="large" disabled style={{margin: '.2rem auto'}} text="large disabled"/>
         <Button cls="default" fixed text="show modal (fixed button)" onClick={this.showModal}/>
+
+        <PayPassword />
+
+        <div style={{margin: '.2rem auto'}}>
+          <PayPassword type="sm" inputId="sm-pay"/>
+        </div>
 
         <div style={{margin: '.2rem auto', width: '6.7rem'}}>
           <CheckBox disabled text="禁止选中" style={{marginBottom: '.2rem'}}/>
