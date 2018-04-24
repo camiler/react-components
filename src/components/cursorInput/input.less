@@ -1,9 +1,11 @@
+@import (reference) '../../common/less/variables';
+
 .input-wrap{
   background-color: #fff;
   height: 1rem;
   line-height: 1rem;
-  padding: 0 .2rem;
   position: relative;
+  width: 100%;
   &.bor-bottom1px{
     position: relative;
     &::after{
@@ -22,8 +24,6 @@
   .input{
     position: absolute;
     top: 0;
-    left: .2rem;
-    right: .2rem;
     bottom: 0;
     z-index: 3;
     width: 100%;
@@ -32,19 +32,17 @@
   }
   .show-wrap{
     color: #333;
-    position: absolute;
-    top: 0;
-    left: .2rem;
-    right: .2rem;
-    bottom: 0;
+    //position: absolute;
+    //top: 0;
+    //bottom: 0;
     z-index: 1;
     .content{
       display: inline-block;
       vertical-align: middle;
-      font-size: 16px;
+      font-size: @font-size-16;
       &.placeholder{
-        font-size: 14px;
-        color: #ccc;
+        font-size: @font-size-16;
+        color: @color-black9;
       }
     }
     .cursor{

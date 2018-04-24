@@ -15,17 +15,7 @@ class CountDown extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({
-      text: nextProps.text
-    })
-  }
-
-  /**
-   * 在父组件中 手机号输入动态改变后 重置计时器
-   * 同时检查按钮是否已经点击过 防止在第一次输入完手机号就重置显示
-   */
-  componentWillReceiveProps() {
-    if( this.props.needReset && this.state.clicked ){
+    if ( nextProps.needReset) {
       this.reset();
     }
   }
@@ -34,12 +24,8 @@ class CountDown extends Component {
     this.setState((prevState) => {
       return {
         seconds: prevState.seconds - 1,
-        text: prevState.seconds + '秒',
+        text: `(${prevState.seconds})重新获取`,
         disabled: true
-      }
-    }, () => {
-      if (this.state.seconds == 0){
-        this.reset();
       }
     });
   }
@@ -50,29 +36,29 @@ class CountDown extends Component {
   }
 
   startCount = () => {
-    this.setState({clicked: true, disabled: true});
     this.timer = setInterval(() => {
-      this.tick();
+      if (this.state.seconds === 0) {
+        this.reset();
+      } else {
+        this.tick();
+      }
     }, 1000);
   }
 
   handleSmsClick = () => {
     const {beforeCount} = this.props;
+    this.setState({clicked: true, disabled: true});
     if (beforeCount) {
-      const beforeRes = beforeCount();
-      if (beforeRes) {
-        this.startCount();
-      }
-    } else {
-      this.startCount();
+      beforeCount();
     }
+    this.startCount();
   }
 
   render () {
     const {disabled, text} = this.state;
     const {style} = this.props;
     return (
-      <button type="button" style={style} className={classnames('btn sms-btn', {'btn-disabled': disabled})} onClick={this.handleSmsClick} disabled={disabled}>{text}</button>
+      <button type="button" style={style} className={classnames('sms-btn', {'btn-disabled': disabled})} onClick={this.handleSmsClick} disabled={disabled}>{text}</button>
     )
   }
 }
@@ -87,8 +73,8 @@ CountDown.propTypes = {
 CountDown.defaultProps = {
   needReset: false,
   text: '获取验证码',
-  beforeCount: () => {return true},
-  style: {}
+  beforeCount: () => {},
+  style: {},
 }
 
 export default CountDown;
