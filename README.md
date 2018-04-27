@@ -23,4 +23,6 @@ These react UI components for mobile page are used in my work. It may just suita
 [Toast](https://github.com/camiler/react-components/tree/master/src/components/toast) 
 
 [TopBar](https://github.com/camiler/react-components/tree/master/src/components/topbar)
+
+[PayPassword](https://github.com/camiler/react-components/tree/master/src/components/payPassword): for six number pay password
  

@@ -51,7 +51,7 @@ class InputCard extends Component {
       errorText = '';
     }
     const {setError, id, getValue} = this.props;
-    setError(errorText);
+    if (setError) setError(errorText);
     const newValue = v.replace(/\s/g, '').replace(/(\d{4})(?=\d)/g, '$1 ');
     this.setState({
       value: newValue,
