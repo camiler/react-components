@@ -13,3 +13,5 @@
 * style: PropTypes.object  外层样式
 * getValue: PropTypes.func  输入时获取值
 * placeholder: PropTypes.string  默认提示
+* maxLength: PropTypes.number  input输入最大长度，默认19
+* initialValue: PropTypes.string  默认卡号值

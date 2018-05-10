@@ -15,9 +15,9 @@ class Input extends Component {
   }
 
   componentWillMount() {
-    const {rule, initialValue} = this.props;
+    const {rule, initialvalue} = this.props;
     this.setState({
-      value: initialValue || ''
+      value: initialvalue || ''
     });
     this.setRule(rule);
   }
@@ -87,19 +87,17 @@ class Input extends Component {
   render() {
     const {value} = this.state;
 
-    const {id, placeholder, cls, disabled, type, maxlength} = this.props;
+    const {cls, disabled, getValue, initialValue, setError, onBlur, onFocus, ...other,} = this.props;
     return (
-      <input type={type} maxLength={maxlength}
-             className={classnames('form-input', cls, {disabled})} value={value}
+      <input value={value} className={classnames('form-input', cls, {disabled})}
              onBlur={this.inputBlur} onFocus={this.inputFocus} onChange={this.inputHandler}
-             id={id} placeholder={placeholder} disabled={disabled}
+             {...other}
       />
     )
   }
 }
 
 Input.propTypes = {
-  id: PropTypes.string,
   rule: PropTypes.array,
   getValue: PropTypes.func,
   setError: PropTypes.func,
@@ -107,10 +105,8 @@ Input.propTypes = {
   placeholder: PropTypes.string,
   onBlur: PropTypes.func,
   onFocus: PropTypes.func,
-  disabled: PropTypes.bool,
   initialValue: PropTypes.string,
   type: PropTypes.string,
-  maxlength: PropTypes.number,
   //checkZero: PropTypes.bool,
 };
 

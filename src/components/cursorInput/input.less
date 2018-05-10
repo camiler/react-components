@@ -28,6 +28,9 @@
     z-index: 3;
     width: 100%;
     opacity: 0;
+    text-indent: -999em; // 隐藏input文字
+    margin-left: -100%;// 隐藏input光标
+    width: 200%; // 保留inputDOM在页面可视区域内
     color: transparent;
   }
   .show-wrap{
@@ -48,11 +51,15 @@
     .cursor{
       height: .5rem;
       margin: .25rem 0;
-      width: 2px;
+      width: 1px;
       display: none;
       vertical-align: middle;
-      background-color: #3E84F5;
+      background-color: @color-black6;
       animation: cursorAni 1.2s ease infinite;
+      &.ios{
+        background-color: @color-main;
+        width: 2px;
+      }
       &.visible{
         display: inline-block;
       }

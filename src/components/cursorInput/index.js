@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 
 import './input.less';
 
+const isIos = (/iphone|ios|ipad|ipod/i).test(navigator.userAgent.toLowerCase());
 class InputCard extends Component {
   constructor(props) {
     super(props)
@@ -16,6 +17,16 @@ class InputCard extends Component {
       showPlaceholder: true,
       visible: false,
       placeholder: '',
+    }
+  }
+
+  componentWillMount() {
+    const {initialValue} = this.props;
+    if (initialValue) {
+      this.setState({
+        showPlaceholder: false,
+        value: initialValue.replace(/\s/g, '').replace(/(\d{4})(?=\d)/g, '$1 ')
+      })
     }
   }
 
@@ -50,17 +61,19 @@ class InputCard extends Component {
     } else {
       errorText = '';
     }
-    const {setError, id, getValue} = this.props;
-    if (setError) setError(errorText);
+    const {setError, id, getValue, maxLength} = this.props;
+    setError(errorText);
     const newValue = v.replace(/\s/g, '').replace(/(\d{4})(?=\d)/g, '$1 ');
-    this.setState({
-      value: newValue,
-      oriValue: v
-    });
-    if (errorText === '') {
-      getValue({[id]: v.trim()}, v);
-    } else {
-      getValue({[id]: ''}, v);
+    if (v.length <= maxLength) {
+      this.setState({
+        value: newValue,
+        oriValue: v
+      });
+      if (errorText === '') {
+        getValue({[id]: v.trim()}, v);
+      } else {
+        getValue({[id]: ''}, v);
+      }
     }
   }
 
@@ -81,13 +94,13 @@ class InputCard extends Component {
 
   render () {
     const {visible, value, showPlaceholder} = this.state;
-    const {cls, borderBottom, style, placeholder} = this.props;
+    const {cls, borderBottom, style, placeholder, maxLength, initialValue} = this.props;
     return (
       <div className={classnames('input-wrap', cls, {'bor-bottom1px': borderBottom})} style={style}>
-        <input type="tel" onInput={this.handleInput} className="input" onBlur={this.blur} onFocus={this.focus}/>
+        <input type="tel" onInput={this.handleInput} className="input" onBlur={this.blur} onFocus={this.focus} maxLength={maxLength} defaultValue={initialValue.replace(/\s+/g, '')}/>
         <p className="show-wrap">
           <span className={classnames('content', {placeholder: showPlaceholder})}>{showPlaceholder ? placeholder : value}</span>
-          <span className={classnames('cursor', {visible})}></span>
+          <span className={classnames('cursor', {ios: isIos}, {visible})}></span>
         </p>
       </div>
     )
@@ -103,16 +116,21 @@ InputCard.propTypes = {
   placeholder: PropTypes.string,
   rule: PropTypes.array,
   setError: PropTypes.func,
+  maxLength: PropTypes.number,
+  initialValue: PropTypes.string
 }
 
 InputCard.defaultProps = {
   cls: '',
   borderBottom: true,
   style: {},
+  maxLength: 19,
   placeholder: '请输入银行卡号',
   getValue: (value) => {
     console.log(value)
-  }
+  },
+  setError: () => {},
+  initialValue: ''
 }
 
 export default InputCard;

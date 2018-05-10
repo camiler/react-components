@@ -99,7 +99,8 @@ class App extends Component {
         </div>
 
         <Countdown needReset={needReset}  />
-        <CursorInput style={{margin: '.2rem'}}/>
+        <CursorInput style={{margin: '.4rem'}}/>
+        <CursorInput style={{margin: '.4rem'}} placeholder="请输入" initialValue="3133213214312432323"/>
 
         <div style={{margin: '.4rem 0'}}>
           <ListItem label="标题文本" text="文本描述" next/>
