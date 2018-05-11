@@ -2,14 +2,27 @@ const path = require("path");
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 
 const entry = process.env.NODE_ENV === 'production' ? {
-    reactbox: ["./src/components/index.js"]
+    reactbox: './src/components/index.js'
   } : {
     vendor: [
       'react',
       'react-dom'
     ],
-    index: ["./src/index.js"]
+    reactbox: './src/components/index.js',
+    app: './src/page/app/index.js',
+    list: './src/page/list/index.js'
   };
+
+const plugins = (function () {
+  return ['app', 'list'].map(item => {
+    return new HtmlWebPackPlugin({
+      filename: item,
+      template: './src/template/index.hbs',
+      chunks: ['vendor', item],
+      inject: true
+    });
+  })
+})();
 
 module.exports = {
   entry,
@@ -67,10 +80,5 @@ module.exports = {
       },
     ]
   },
-  plugins: [
-    new HtmlWebPackPlugin({
-      template: "./src/template/index.hbs",
-      filename: "./index.html"
-    })
-  ]
+  plugins
 };

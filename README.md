@@ -1,6 +1,6 @@
 ### react components
 
-These react UI components for mobile page are used in my work. It may just suitable for me. You can use it as a reference and hope it give you idea.
+These react UI components for mobile page are used in my work. It may just suitable for me. You can use it as a reference and hope this helps.
 
 #### form components
 
