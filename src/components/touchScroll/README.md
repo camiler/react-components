@@ -45,8 +45,7 @@
 4. 上滑的关键在于min值的缺点，所以对于otherHeight的值一定要计算正确。如果是整个视口页面的滑动，那么就不需要设置这个值了。比方说：页面视口底部有个fix的60px高度的按钮，而滚动元素就是除这个按钮的高度内可见，那么这个值就设置为60。 
 
 Demo演示：
-<video src="./touchscroll.mp4" width="480" height="320" controls="controls">
-    Your browser does not support the video tag.
-</video>
+
+<iframe height=320 width=480 src="https://github.com/camiler/react-components/blob/master/src/components/touchScroll/touchscroll.mp4" frameborder=0 allowfullscreen></iframe>
 
 另外还可以参照[QQ看点demo](https://github.com/AlloyTeam/AlloyTouch/wiki/kandian)
