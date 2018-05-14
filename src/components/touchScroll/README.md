@@ -46,6 +46,6 @@
 
 Demo演示：
 
-<iframe height=320 width=480 src="https://github.com/camiler/react-components/blob/master/src/components/touchScroll/touchscroll.mp4" frameborder=0 allowfullscreen></iframe>
+<video controls="controls" src="https://pan.baidu.com/s/1P7tD458pum_jdHWyhQapxA" width="100%"></video>
 
 另外还可以参照[QQ看点demo](https://github.com/AlloyTeam/AlloyTouch/wiki/kandian)
