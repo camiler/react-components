@@ -14,7 +14,7 @@ import AutoComplete from './autoCompelte';
 import Countdown from './countdown';
 import CursorInput from './cursorInput';
 import PayPassword from './payPassword';
-import TouchScroll from './touch-scroll';
+import TouchScroll from './touchScroll';
 
 module.exports = {
   Button,
