@@ -46,6 +46,8 @@
 
 Demo演示：
 
-<video controls="controls" src="https://pan.baidu.com/s/1P7tD458pum_jdHWyhQapxA" width="100%"></video>
+[![ScreenShot](https://github.com/camiler/react-components/blob/master/src/components/touchScroll/touchscroll.jpg)](https://pan.baidu.com/s/1P7tD458pum_jdHWyhQapxA)
+
+视频地址 https://pan.baidu.com/s/1P7tD458pum_jdHWyhQapxA
 
 另外还可以参照[QQ看点demo](https://github.com/AlloyTeam/AlloyTouch/wiki/kandian)
