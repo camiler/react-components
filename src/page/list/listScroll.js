@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {TouchScroll} from '../../components/';
+import TouchScroll from 'react-touch-scroll-view';
 
 class ListScroll extends Component {
   constructor(props) {
