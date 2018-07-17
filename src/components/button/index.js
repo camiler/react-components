@@ -19,7 +19,6 @@ class Btn extends PureComponent {
 
     const props = {
       href,
-      ref: 'btn',
       style,
       className: classes,
       disabled,

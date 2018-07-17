@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Button, AutoComplete, Toast, Loading, Modal, CheckBox, Countdown, CursorInput, ListItem, RadioGroup, TopBar, FormItem, Select, Input, PayPassword} from '../../components/index';
+import {Button, AutoComplete, Toast, Loading, Modal, CheckBox, Countdown, CursorInput, ListItem, RadioGroup, TopBar, FormItem, Select, Input, PayPassword} from '../../../dist/';
 
 class App extends Component {
   constructor(props) {

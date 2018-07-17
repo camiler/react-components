@@ -15,7 +15,7 @@ import Countdown from './countdown';
 import CursorInput from './cursorInput';
 import PayPassword from './payPassword';
 
-module.exports = {
+export {
   Button,
   FormItem,
   Input,

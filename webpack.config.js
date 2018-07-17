@@ -13,26 +13,19 @@ const entry = process.env.NODE_ENV === 'production' ? {
     list: './src/page/list/index.js'
   };
 
-const plugins = (function () {
-  return ['app', 'list'].map(item => {
-    return new HtmlWebPackPlugin({
-      filename: item,
-      template: './src/template/index.hbs',
-      chunks: ['vendor', item],
-      inject: true
-    });
-  })
-})();
+const output = process.env.NODE_ENV === 'production' ? {
+  path: path.resolve(__dirname, "dist"),
+  filename: "index.js",
+  library: 'ReactBox',
+  libraryTarget: 'umd'
+} : {
+  path: path.resolve(__dirname, "dist"),
+  filename: "js/[name].js"
+};
 
-module.exports = {
+const config = {
   entry,
-  output: {
-    path: path.resolve(__dirname, "dist"),
-    filename: "js/[name].js"
-  },
-  devServer: {
-    contentBase: "./dist"
-  },
+  output,
   module: {
     rules: [
       {
@@ -79,6 +72,25 @@ module.exports = {
         }
       },
     ]
-  },
-  plugins
+  }
 };
+if (process.env.NODE_ENV === 'development') {
+  config.plugins = (function () {
+    return ['app', 'list'].map(item => {
+      return new HtmlWebPackPlugin({
+        filename: item,
+        template: './src/template/index.hbs',
+        chunks: ['vendor', item],
+        inject: true
+      });
+    })
+  })();
+}
+
+if (process.env.NODE_ENV === 'production') {
+  config.externals = {
+    'react': 'umd react',
+    'react-dom': 'umd react-dom'
+  }
+}
+module.exports = config;

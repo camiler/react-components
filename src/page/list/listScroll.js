@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import TouchScroll from 'react-touch-scroll-view';
+import './index.less';
 
 class ListScroll extends Component {
   constructor(props) {

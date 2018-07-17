@@ -68,7 +68,7 @@ class PayPassword extends Component{
 
     return (
         <div className={classnames("pwdWrap", type, cls)} style={style}>
-            <label htmlFor={inputId} className="itemsWrap" ref="pwdLabel" onFocus={this.focusVisibleField}>
+            <label htmlFor={inputId} className="itemsWrap" onFocus={this.focusVisibleField}>
                 {active.map(function(item, idx){
                     return <b className={classnames('pwdItem', type, {active: item})} key={idx}></b>;
                 })}
