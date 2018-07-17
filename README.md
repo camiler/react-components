@@ -1,9 +1,13 @@
-### react components
+## react components
 
 These react UI components for mobile page are used in my work. It may just suitable for me. You can use it as a reference and hope this helps.
 
-#### form components
+## Installation
+`npm install --save react-app-component-box`
 
+## How to use
+`import {Button, PayPassword, ...} from 'react-app-component-box' ` 
+ 
 1、[FormItem](https://github.com/camiler/react-components/tree/master/src/components/formItem)
 ```js
 <FormItem>
@@ -40,9 +44,6 @@ These react UI components for mobile page are used in my work. It may just suita
 [TopBar](https://github.com/camiler/react-components/tree/master/src/components/topbar)
 
 [PayPassword](https://github.com/camiler/react-components/tree/master/src/components/payPassword): for six number pay password
-
-[TouchScroll](https://github.com/camiler/react-components/tree/master/src/components/touchScroll): A component to pull down to refresh, slide up to load next page. [list demo](https://github.com/camiler/react-components/blob/master/src/page/list/listScroll.js)
-
 
 
 
