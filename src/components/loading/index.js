@@ -1,41 +1,36 @@
-import React, {Component} from 'react';
+import React, {useEffect} from 'react';
 import PropTypes from 'prop-types';
 import './loading.less';
 
-class Loading extends Component{
-
-  componentWillReceiveProps(nextProps) {
-    const {show, scroll} = nextProps;
-    if (!scroll) {
-      if (show) {
-        document.body.addEventListener('touchmove', this.documentMoveHandler, false);
-        document.body.addEventListener('wheel', this.documentMoveHandler, false);
-      } else {
-        document.body.removeEventListener('touchmove', this.documentMoveHandler, false);
-        document.body.removeEventListener('wheel', this.documentMoveHandler, false);
-      }
-    }
-  }
-
-  documentMoveHandler = (event) => {
+const Loading = (props) => {
+  const documentMoveHandler = (event) => {
     event.preventDefault();
     event.stopPropagation();
-  }
+  };
 
-  render() {
-    const {show} = this.props;
-    if (show) {
-      return (
-        <div
-          className="flex loading-wrap fixedMask boxCenter"
-        >
-          <div className="loading"></div>
-        </div>
-      )
+  useEffect(() => {
+    if (!props.scroll) {
+      if (props.show) {
+        document.body.addEventListener('touchmove', documentMoveHandler, false);
+        document.body.addEventListener('wheel', documentMoveHandler, false);
+      } else {
+        //todo: fix 这里没有起作用？
+        document.body.removeEventListener('touchmove', documentMoveHandler, false);
+        document.body.removeEventListener('wheel', documentMoveHandler, false);
+      }
     }
-    return null;
-  }
+  });
 
+  if (props.show) {
+    return (
+      <div
+        className="flex loading-wrap fixedMask boxCenter"
+      >
+        <div className="loading"></div>
+      </div>
+    )
+  }
+  return null;
 }
 
 Loading.propTypes = {

@@ -1,47 +1,40 @@
-import React, {Component} from 'react';
+import React, {useEffect, useRef} from 'react';
 import PropTypes from 'prop-types';
 import './toast.less';
 
-class Toast extends Component {
-  constructor(options) {
-    super(options)
-    this.state = {
-    }
-  }
+const Toast = (props) => {
 
-  componentWillReceiveProps(nextProps) {
-    const {show, scroll} = nextProps;
-    if (!scroll) {
-      if (show) {
-        document.body.addEventListener('touchmove', this.documentMoveHandler, false);
-        document.body.addEventListener('wheel', this.documentMoveHandler, false);
-      } else {
-        document.body.removeEventListener('touchmove', this.documentMoveHandler, false);
-        document.body.removeEventListener('wheel', this.documentMoveHandler, false);
-      }
-    }
-  }
-
-  documentMoveHandler = (event) => {
+  const documentMoveHandler = (event) => {
     event.preventDefault();
     event.stopPropagation();
-  }
+  };
 
-  render() {
-    const {msg, show} = this.props;
-    if (show) {
-      return (
-        <div
-          className="flex boxCenter fixedMask toast-panel"
-        >
-          {msg ? (
-            <div className="toast-content">{msg}</div>
-          ) : null}
-        </div>
-      )
+  const toastTimerRef = useRef();
+  useEffect(() => {
+    if (props.show) {
+      document.body.addEventListener('touchmove', documentMoveHandler, false);
+      document.body.addEventListener('wheel', documentMoveHandler, false);
     }
-    return null;
+    const id = setTimeout(() => {
+      document.body.removeEventListener('touchmove', documentMoveHandler, false);
+      document.body.removeEventListener('wheel', documentMoveHandler, false);
+    }, 2600);
+    toastTimerRef.current = id;
+    return () => clearTimeout(toastTimerRef.current);
+  })
+
+  if (props.show) {
+    return (
+      <div
+        className="flex boxCenter fixedMask toast-panel"
+      >
+        {props.msg ? (
+          <div className="toast-content">{props.msg}</div>
+        ) : null}
+      </div>
+    )
   }
+  return null;
 }
 
 Toast.defaultProps = {

@@ -8,9 +8,7 @@ const entry = process.env.NODE_ENV === 'production' ? {
       'react',
       'react-dom'
     ],
-    reactbox: './src/components/index.js',
-    app: './src/page/app/index.js',
-    list: './src/page/list/index.js'
+    app: './src/page/app/index.js'
   };
 
 const output = process.env.NODE_ENV === 'production' ? {
@@ -19,8 +17,8 @@ const output = process.env.NODE_ENV === 'production' ? {
   library: 'ReactBox',
   libraryTarget: 'umd'
 } : {
-  path: path.resolve(__dirname, "dist"),
-  filename: "js/[name].js"
+  path: path.resolve(__dirname, "public"),
+  filename: "[name].js"
 };
 
 const config = {
@@ -76,7 +74,7 @@ const config = {
 };
 if (process.env.NODE_ENV === 'development') {
   config.plugins = (function () {
-    return ['app', 'list'].map(item => {
+    return ['app'].map(item => {
       return new HtmlWebPackPlugin({
         filename: item,
         template: './src/template/index.hbs',
