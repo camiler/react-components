@@ -1,74 +1,59 @@
-/**
- * by camiler
- * 长数字 空格间隔 模拟光标
- */
-import React, {Component} from 'react';
+import React, {useState, useEffect} from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
 import './input.less';
 
 const isIos = (/iphone|ios|ipad|ipod/i).test(navigator.userAgent.toLowerCase());
-class InputCard extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      value: '',
-      showPlaceholder: true,
-      visible: false,
-      placeholder: '',
+const setRule = (rule) => {
+  let obj = {};
+  (rule || []).forEach((ruleItem) => {
+    if (ruleItem.required) {
+      obj = {requireObj: ruleItem, ...obj};
     }
-  }
-
-  componentWillMount() {
-    const {initialValue} = this.props;
-    if (initialValue) {
-      this.setState({
-        showPlaceholder: false,
-        value: initialValue.replace(/\s/g, '').replace(/(\d{4})(?=\d)/g, '$1 ')
-      })
+    if (ruleItem.pattern) {
+      obj = {patternObj: ruleItem, ...obj};
     }
-  }
+    if (ruleItem.range) {
+      obj = {rangeObj: ruleItem, ...obj};
+    }
+  });
+  return obj;
+}
+const regInput = v => v.replace(/\s/g, '').replace(/(\d{4})(?=\d)/g, '$1 ');
 
-  componentWillReceiveProps(nextProps) {
-    this.setRule(nextProps.rule);
-  }
+const InputCard = (props) => {
+  const [value, setValue] = useState(regInput(props.initialValue));
+  const [showPlaceholder, setShowPlaceholder] = useState(!props.initialValue);
+  const [visible, setVisible] = useState(false);
+  const [ruleObj, setRuleObj] = useState(setRule(props.rule));
 
-  setRule = (rule) => {
-    (rule || []).forEach((ruleItem) => {
-      if (ruleItem.required) {
-        this.requiredObj = ruleItem;
-      }
-      if (ruleItem.pattern) {
-        this.patternObj = ruleItem;
-      }
-      if (ruleItem.range) {
-        this.rangeObj = ruleItem;
-      }
-    });
-  }
+  useEffect(() => {
+    setRuleObj(setRule(props.rule));
+  }, [props.rule])
 
 
-  handleInput = (e) => {
+  const handleInput = (e) => {
     const v = e.target.value;
     let errorText = '';
-    const pattern = this.patternObj && this.patternObj.pattern || null;
-    const range = this.rangeObj && this.rangeObj.range || null;
-    if (pattern && !pattern.test(v) && v) {
-      errorText = this.patternObj.message;
-    } else if (range && (Number(v) > Number(range[1]) || Number(v) < Number(range[0]))) {
-      errorText = this.rangeObj.message;
+    const {patternObj, rangeObj} = ruleObj;
+    const pattern = patternObj && patternObj.pattern || null;
+    const range = rangeObj && rangeObj.range || null;
+    if (pattern && !pattern.test(value) && value) {
+      errorText = patternObj.message;
+    } else if (range && (Number.isNaN(Number(value))
+        || Number(value) > Number(range[1])
+        || Number(value) < Number(range[0])
+      )) {
+      errorText = rangeObj.message;
     } else {
       errorText = '';
     }
-    const {setError, id, getValue, maxLength} = this.props;
+    const {setError, id, getValue, maxLength} = props;
     setError(errorText);
     const newValue = v.replace(/\s/g, '').replace(/(\d{4})(?=\d)/g, '$1 ');
     if (v.length <= maxLength) {
-      this.setState({
-        value: newValue,
-        oriValue: v
-      });
+      setValue(newValue);
       if (errorText === '') {
         getValue({[id]: v.trim()}, v);
       } else {
@@ -77,34 +62,25 @@ class InputCard extends Component {
     }
   }
 
-  focus = () => {
-    this.setState({
-      visible: true,
-      showPlaceholder: false
-    })
+  const focus = () => {
+    setVisible(true);
+    setShowPlaceholder(false);
   }
 
-  blur = () => {
-    const showPlaceholder = !this.state.value;
-    this.setState({
-      visible: false,
-      showPlaceholder,
-    })
+  const blur = () => {
+    setVisible(false);
+    setShowPlaceholder(!value);
   }
 
-  render () {
-    const {visible, value, showPlaceholder} = this.state;
-    const {cls, borderBottom, style, placeholder, maxLength, initialValue} = this.props;
-    return (
-      <div className={classnames('input-wrap', cls, {'bor-bottom1px': borderBottom})} style={style}>
-        <input type="tel" onInput={this.handleInput} className="input" onBlur={this.blur} onFocus={this.focus} maxLength={maxLength} defaultValue={initialValue.replace(/\s+/g, '')}/>
-        <p className="show-wrap">
-          <span className={classnames('content', {placeholder: showPlaceholder})}>{showPlaceholder ? placeholder : value}</span>
-          <span className={classnames('cursor', {ios: isIos}, {visible})}></span>
-        </p>
-      </div>
-    )
-  }
+  return (
+    <div className={classnames('input-wrap', props.cls, {'bor-bottom1px': props.borderBottom})} style={props.style}>
+      <input type="tel" onInput={handleInput} className="input" onBlur={blur} onFocus={focus} maxLength={props.maxLength} defaultValue={props.initialValue.replace(/\s+/g, '')}/>
+      <p className="show-wrap">
+        <span className={classnames('content', {placeholder: showPlaceholder})}>{showPlaceholder ? props.placeholder : value}</span>
+        <span className={classnames('cursor', {ios: isIos}, {visible})}></span>
+      </p>
+    </div>
+  )
 }
 
 InputCard.propTypes = {

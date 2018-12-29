@@ -1,80 +1,76 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import './countdown.less';
 
-class CountDown extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      seconds: 59,
-      text: '获取验证码',
-      clicked: false,
-      disabled: false
-    };
+const CountDown = (props) => {
+  const [second, setSecond] = useState(59);
+  const [clicked, setClicked] = useState(false);
+  const [disabled, setDisabled] = useState(false);
+  const timerRef = useRef();
+
+  const reset = () => {
+    clearTimeout(timerRef.current);
+    setSecond(59);
+    setDisabled(false);
+    setClicked(false);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if ( nextProps.needReset) {
-      this.reset();
+  useEffect(() => {
+    if (second === 0 || props.needReset) { //结束 reset
+      reset();
+    }
+    if (clicked && second !== 0) {
+      timerRef.current = setTimeout(() => {
+        setSecond(second - 1);
+      }, 1000);
+    }
+    return () => {
+      clearTimeout(timerRef.current);
+      unReset();
+    }
+  }, [second, clicked, props.needReset]);
+
+  const unReset = () => {
+    if (props.needReset) {
+      if (props.triggerUnReset) props.triggerUnReset();
+      else {
+        throw new Error('Need Both "needReset" and "triggerUnReset" to call reset');
+      }
     }
   }
 
-  tick = () => {
-    this.setState((prevState) => {
-      return {
-        seconds: prevState.seconds - 1,
-        text: `(${prevState.seconds})重新获取`,
-        disabled: true
-      }
-    });
-  }
-
-  reset = () => {
-    clearInterval(this.timer);
-    this.setState({text: this.props.text, seconds: 59, disabled: false});
-  }
-
-  startCount = () => {
-    this.timer = setInterval(() => {
-      if (this.state.seconds === 0) {
-        this.reset();
-      } else {
-        this.tick();
-      }
-    }, 1000);
-  }
-
-  handleSmsClick = () => {
-    const {beforeCount} = this.props;
-    this.setState({clicked: true, disabled: true});
-    if (beforeCount) {
-      beforeCount();
+  const handleSmsClick = () => {
+    setDisabled(true);
+    if (props.beforeCount) {
+      props.beforeCount();
     }
-    this.startCount();
+    setClicked(true);
   }
 
-  render () {
-    const {disabled, text} = this.state;
-    const {style} = this.props;
-    return (
-      <button type="button" style={style} className={classnames('sms-btn', {'btn-disabled': disabled})} onClick={this.handleSmsClick} disabled={disabled}>{text}</button>
-    )
-  }
+  return (
+    <button type="button" style={props.style}
+            className={classnames('sms-btn', {'btn-disabled': disabled})}
+            onClick={handleSmsClick}
+            disabled={disabled}>
+      {clicked ? `(${second})重新获取` : props.text}
+    </button>
+  );
 }
 
 CountDown.propTypes = {
-  needReset: PropTypes.bool,
   text: PropTypes.string,
   beforeCount: PropTypes.func,
   style: PropTypes.object,
+  needReset: PropTypes.bool,
+  triggerUnReset: PropTypes.func,
 }
 
 CountDown.defaultProps = {
-  needReset: false,
   text: '获取验证码',
   beforeCount: () => {},
   style: {},
+  needReset: false,
 }
 
 export default CountDown;

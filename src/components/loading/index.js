@@ -1,25 +1,24 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useLayoutEffect} from 'react';
 import PropTypes from 'prop-types';
 import './loading.less';
 
 const Loading = (props) => {
   const documentMoveHandler = (event) => {
+    console.log('moving')
     event.preventDefault();
     event.stopPropagation();
   };
 
   useEffect(() => {
-    if (!props.scroll) {
-      if (props.show) {
-        document.body.addEventListener('touchmove', documentMoveHandler, false);
-        document.body.addEventListener('wheel', documentMoveHandler, false);
-      } else {
-        //todo: fix 这里没有起作用？
-        document.body.removeEventListener('touchmove', documentMoveHandler, false);
-        document.body.removeEventListener('wheel', documentMoveHandler, false);
-      }
+    if (props.show) {
+      document.body.addEventListener('touchmove', documentMoveHandler);
+      document.body.addEventListener('wheel', documentMoveHandler);
+    } else {
+      console.log('remove')
+      document.body.removeEventListener('wheel', documentMoveHandler);
+      document.body.removeEventListener('touchmove', documentMoveHandler);
     }
-  });
+  }, [props.show]);
 
   if (props.show) {
     return (

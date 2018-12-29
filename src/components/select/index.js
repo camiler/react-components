@@ -1,43 +1,23 @@
-import React, {Component} from 'react';
+import React, {Component, useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 import './select.less';
-class Select extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      selectedValue: '',
-      gray: true,
-    };
-    this.requiredObj = null;
-  }
+const Select = (props) => {
+  const [selectedValue, setSelectedValue] = useState(props.selectedValue || props.placeholder);
+  const [gray, setGray] = useState(props.selectedValue === props.placeholder || props.selectedValue === '');
+  let requiredObj = null;
+  (props.rule || []).forEach((ruleItem) => {
+    if (ruleItem.required) {
+      requiredObj = ruleItem;
+    }
+  });
 
-  componentWillMount() {
-    const {rule, selectedValue, placeholder} = this.props;
-    this.setState({
-      selectedValue: selectedValue || placeholder,
-    });
-    (rule || []).forEach((ruleItem) => {
-      if (ruleItem.required) {
-        this.requiredObj = ruleItem;
-      }
-    });
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const nextSelectedValue = nextProps.selectedValue;
-    this.setState({
-      selectedValue: nextSelectedValue || this.props.placeholder,
-      gray: nextSelectedValue === this.props.placeholder || nextSelectedValue === ''
-    })
-  }
-
-  renderList = (list) => {
+  const renderList = (list) => {
     if (!list || list.size === 0) {
       return null;
     }
-    const {optName, optKey} = this.props;
+    const {optName, optKey} = props;
     return list.map((item) => {
       return (
         <option key={item[optKey]} value={item[optKey]}>
@@ -47,44 +27,35 @@ class Select extends Component {
     });
   }
 
-  selectedHandler = (e) => {
-    const {placeholder} = this.props;
+  const selectedHandler = (e) => {
     const selectedValue = e.target.value;
-    if (selectedValue === placeholder || selectedValue === '') {
-      this.setState({
-        gray: true
-      })
+    if (selectedValue === props.placeholder || selectedValue === '') {
+      setGray(true);
     } else {
-      this.props.getValue({[this.props.id]: selectedValue});
-      const required = this.requiredObj && this.requiredObj.required || null;
+      props.getValue({[props.id]: selectedValue});
+      const required = requiredObj && requiredObj.required || null;
       if (required && !selectedValue.trim()) {
-        this.props.setError(this.requiredObj.message)
+        props.setError(requiredObj.message)
       } else {
-        this.props.setError('');
+        props.setError('');
       }
-      this.setState({
-        selectedValue,
-        gray: false
-      });
+      setGray(false);
+      setSelectedValue(selectedValue);
     }
   }
 
-  render() {
-    const {selectedValue, gray} = this.state;
-    const { cls, list, placeholder, id} = this.props;
-    return (
-      <div className={classnames('form-select', cls)}>
-        <select name={id} id={id}
-                className={classnames({gray})}
-                onChange={this.selectedHandler}
-                value={selectedValue}
-        >
-          <option value={placeholder} disabled>{placeholder}</option>
-          {this.renderList(list)}
-        </select>
-      </div>
-    )
-  }
+  return (
+    <div className={classnames('form-select', props.cls)}>
+      <select name={props.id} id={props.id}
+              className={classnames({gray})}
+              onChange={selectedHandler}
+              value={selectedValue}
+      >
+        <option value={props.placeholder} disabled>{props.placeholder}</option>
+        {renderList(props.list)}
+      </select>
+    </div>
+  )
 }
 
 Select.propTypes = {

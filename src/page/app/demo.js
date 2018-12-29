@@ -15,12 +15,14 @@ const App = (props) => {
         clearTimeout(timerRef.current)
       }
     }
-    if (state.selectId === 1 && !state.needReset) {
-      updateState({needReset: true})
+    if (state.selectId === 1) {
+      console.log('set')
+      updateState({needReset: true});
     }
-  });
+  }, [state]);
 
   const updateState = (obj) => {
+    console.log(obj)
     setState(state => ({...state, ...obj}));
   }
 
@@ -44,7 +46,7 @@ const App = (props) => {
                     inputKey="bookName"
       />
 
-      <Countdown needReset={state.needReset}  />
+      <Countdown needReset={state.needReset} triggerUnReset={() => updateState({needReset: false})} />
 
       <Button cls="large default" style={{margin: '.2rem auto'}} text="show toast (large default)" onClick={() => updateState({toast: true})}/>
       <Button cls="large pressed" style={{margin: '.2rem auto'}} text="show loading (large pressed)" onClick={() =>  updateState({loading: true})}/>
@@ -61,8 +63,7 @@ const App = (props) => {
         <CheckBox disabled text="禁止选中" style={{marginBottom: '.2rem'}}/>
         <CheckBox id="agreement" text={<a href="http://www.baidu.com">百度</a>} />
       </div>
-      <CursorInput style={{margin: '.4rem'}}/>
-      <CursorInput style={{margin: '.4rem'}} placeholder="请输入" initialValue="3133213214312432323"/>
+      <CursorInput style={{margin: '.4rem'}} id="bankCard" placeholder="请输入"/>
 
       <div style={{margin: '.4rem 0'}}>
         <ListItem label="标题文本" text="文本描述" next/>
@@ -85,7 +86,7 @@ const App = (props) => {
                   range: [0, 100], message: `分数规则错误`,
                 }]}
       >
-        <Input placeholder="请输入得分" type="tel" maxLength={3} initialValue={state.score}/>
+        <Input placeholder="请输入得分" type="tel" maxLength={3} initialValue={80}/>
       </FormItem>
       <FormItem label="选择项"
                 idFor="select"
@@ -102,7 +103,7 @@ const App = (props) => {
 
       <Toast msg="输入不能为空" show={state.toast} />
       <Loading show={state.loading}/>
-      <Modal visible={state.modal}
+      <Modal visible={state.modal} confirm={() => updateState({modal: false})}
              cancel={() => updateState({modal: false})}
       >
       </Modal>

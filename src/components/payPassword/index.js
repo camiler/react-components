@@ -1,50 +1,37 @@
-import React, {Component} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import './password.less';
 
-class PayPassword extends Component{
-  constructor (props) {
-    super(props);
-    this.pwdInputRef = React.createRef();
-    this.state = {
-      active: new Array(6).fill(false),
-      hasBeenFocused: false,
-      value: ''
-    }
+const PayPassword = (props) => {
+  const pwdInputRef = useRef(null);
+  const [active, setActive] = useState(new Array(6).fill(false));
+  const [hasBeenFocused, setHasBeenFocused] = useState(false);
+  const [value, setValue] = useState('');
+
+  const focusVisibleField = () => {
+    pwdInputRef.current.focus();
   }
 
-  componentDidUpdate() {
-    const { hasBeenFocused } = this.state;
-
-    if ( hasBeenFocused) {
-      this.focusVisibleField();
-    }
-  }
-
-  inputListen = (event) => {
-    const {inputChange, inputEnd} = this.props;
+  const inputListen = (event) => {
+    const {inputChange, inputEnd} = props;
 
     let val = event.target.value,
-      valArr = val.split(''),
-      actives = this.state.active;
+      valArr = val.split('');
 
     valArr.forEach((x, i)=>{
       if ( x ) {
-        actives[i] = true;
+        active[i] = true;
       }
     })
 
-    actives.forEach((item, j)=>{
+    active.forEach((item, j)=>{
       if ( j > valArr.length - 1 ) {
-        actives[j] = false;
+        active[j] = false;
       }
     })
-
-    this.setState({
-      active: actives,
-      value: val
-    })
+    setActive(active);
+    setValue(val);
 
     inputChange &&  inputChange(val)
 
@@ -53,32 +40,24 @@ class PayPassword extends Component{
     }
   }
 
-  focusVisibleField = () => {
-      this.pwdInputRef.current.focus();
-  }
+  useEffect(() => {
+    if (hasBeenFocused) {
+      focusVisibleField()
+    }
+  }, [hasBeenFocused])
 
-  inputFocus = () => {
-    this.setState({ hasBeenFocused: true })
-  }
-
-  render () {
-
-    const {style, cls, type, inputId } = this.props;
-    const {value, active} = this.state;
-
-    return (
-        <div className={classnames("pwdWrap", type, cls)} style={style}>
-            <label htmlFor={inputId} className="itemsWrap" onFocus={this.focusVisibleField}>
-                {active.map(function(item, idx){
-                    return <b className={classnames('pwdItem', type, {active: item})} key={idx}></b>;
-                })}
-            </label>
-            <input type="tel" autoComplete="off" value={value} onFocus={this.inputFocus} id={inputId}
-                   ref={this.pwdInputRef} onInput={this.inputListen} maxLength={6}
-            />
-        </div>
-    )
-  }
+  return (
+    <div className={classnames("pwdWrap", props.type, props.cls)} style={props.style}>
+      <label htmlFor={props.inputId} className="itemsWrap" onFocus={focusVisibleField}>
+        {active.map(function(item, idx){
+          return <b className={classnames('pwdItem', props.type, {active: item})} key={idx}></b>;
+        })}
+      </label>
+      <input type="tel" autoComplete="off" value={value} onFocus={() => setHasBeenFocused(true)} id={props.inputId}
+             ref={pwdInputRef} onInput={inputListen} maxLength={6}
+      />
+    </div>
+  )
 }
 
 PayPassword.propTypes = {

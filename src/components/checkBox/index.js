@@ -1,52 +1,31 @@
-import React, {PureComponent} from 'react';
+import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import './checkbox.less';
 
-class CheckBox extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      checked: false
-    }
-  }
+const CheckBox = (props) => {
+  const [checked, setChecked] = useState(props.checked);
 
-  componentWillMount() {
-    this.setState({
-      checked: this.props.checked
-    })
-  }
+  useEffect(() => {
+    setChecked(props.checked);
+  }, [props.checked])
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      checked: nextProps.checked,
-    })
-  }
-
-  boxCheck = () => {
-    const {disabled, getValue, id} = this.props;
+  const boxCheck = () => {
+    const {disabled, getValue, id} = props;
     if (!disabled) {
-      this.setState(({checked}) => ({
-        checked: !checked
-      }), () => {
-        if (getValue) getValue({[id]: this.state.checked});
-      });
+      if (getValue) getValue({[id]: !checked});
+      setChecked(!checked);
     }
   }
 
-  render() {
-    const {checked} = this.state;
-    const {disabled, text, style} = this.props;
-
-    return (
-      <div className="checkBox-wrap flex boxAlignStart" style={style}>
-        <label className={classnames('outer', {checked, disabled})} onClick={this.boxCheck}>
-          <span className="inner"></span>
-        </label>
-        <div className="text flexBox">{text}</div>
-      </div>
-    )
-  }
+  return (
+    <div className="checkBox-wrap flex boxAlignStart" style={props.style}>
+      <label className={classnames('outer', {checked, disabled: props.disabled})} onClick={boxCheck}>
+        <span className="inner"></span>
+      </label>
+      <div className="text flexBox">{props.text}</div>
+    </div>
+  )
 }
 
 CheckBox.propTypes = {

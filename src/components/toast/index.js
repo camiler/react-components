@@ -1,9 +1,9 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import PropTypes from 'prop-types';
 import './toast.less';
 
 const Toast = (props) => {
-
+  //const [show, setShow] = useState(false);
   const documentMoveHandler = (event) => {
     event.preventDefault();
     event.stopPropagation();
@@ -21,7 +21,7 @@ const Toast = (props) => {
     }, 2600);
     toastTimerRef.current = id;
     return () => clearTimeout(toastTimerRef.current);
-  })
+  }, [props.show])
 
   if (props.show) {
     return (

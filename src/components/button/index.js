@@ -1,32 +1,23 @@
-import React, {PureComponent} from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 import './button.less';
 
-class Btn extends PureComponent {
-  clickHandler = (event) => {
-    const {href, disabled, onClick} = this.props;
+const Btn = (props) => {
+  const {cls, fixed, text, disabled, href, style, onClick} = props;
+  const clickHandler = (event) => {
     if (!href && !disabled) {
-      if (onClick) onClick(event);
+      onClick(event);
     }
-  }
-
-  render() {
-    const {cls, fixed, text, disabled, href, style, onClick} = this.props;
-    const classes = classnames('btn', cls, {'btn-bottom-fixed': fixed, disabled});
-    const element = href ? 'a' : 'button';
-
-    const props = {
-      href,
-      style,
-      className: classes,
-      disabled,
-      onClick: onClick ? this.clickHandler : null,
-    }
-
-    return React.createElement(element, props, text);
-  }
+  };
+  return React.createElement(href ? 'a' : 'button', {
+    href,
+    style,
+    className: classnames('btn', cls, {'btn-bottom-fixed': fixed, disabled}),
+    disabled,
+    onClick: onClick ? clickHandler : null,
+  }, text);
 }
 
 Btn.defaultProps = {

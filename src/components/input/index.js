@@ -1,100 +1,76 @@
-import React, {Component} from 'react';
+import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 import './input.less';
-class Input extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: '',
-    };
-    this.requiredObj = null;
-    this.patternObj = null;
-    this.rangeObj = null;
-  }
 
-  componentWillMount() {
-    const {rule, initialvalue} = this.props;
-    this.setState({
-      value: initialvalue || ''
-    });
-    this.setRule(rule);
-  }
+const setRule = (rule) => {
+  let obj = {};
+  (rule || []).forEach((ruleItem) => {
+    if (ruleItem.required) {
+      obj = {requireObj: ruleItem, ...obj};
+    }
+    if (ruleItem.pattern) {
+      obj = {patternObj: ruleItem, ...obj};
+    }
+    if (ruleItem.range) {
+      obj = {rangeObj: ruleItem, ...obj};
+    }
+  });
+  return obj;
+}
 
-  componentWillReceiveProps(nextProps) {
-    this.setRule(nextProps.rule);
-  }
+const Input = (props) => {
+  const [value, setValue] = useState(props.initialValue);
+  const [ruleObj, setRuleObj] = useState(setRule(props.rule));
 
-  setRule = (rule) => {
-    (rule || []).forEach((ruleItem) => {
-      if (ruleItem.required) {
-        this.requiredObj = ruleItem;
-      }
-      if (ruleItem.pattern) {
-        this.patternObj = ruleItem;
-      }
-      if (ruleItem.range) {
-        this.rangeObj = ruleItem;
-      }
-    });
-  }
-
-  inputHandler = (e) => {
+  const inputHandler = (e) => {
     const value = e.target.value;
     let errorText = '';
-    const pattern = this.patternObj && this.patternObj.pattern || null;
-    const range = this.rangeObj && this.rangeObj.range || null;
+    const {patternObj, rangeObj} = ruleObj;
+    const pattern = patternObj && patternObj.pattern || null;
+    const range = rangeObj && rangeObj.range || null;
     if (pattern && !pattern.test(value) && value) {
-      errorText = this.patternObj.message;
-    } else if (range && (Number(value) > Number(range[1]) || Number(value) < Number(range[0]))) {
-      errorText = this.rangeObj.message;
+      errorText = patternObj.message;
+    } else if (range && (Number.isNaN(Number(value))
+        || Number(value) > Number(range[1])
+        || Number(value) < Number(range[0])
+      )) {
+      errorText = rangeObj.message;
     } else {
       errorText = '';
     }
-    const {setError, id, getValue} = this.props;
-    // if (checkZero) {
-    //   value = Number(value) === 0 ? 0 : value;
-    //   value =
-    // }
-    setError(errorText);
-    this.setState({
-      value,
-    }, () => {
-      if (errorText === '') {
-        getValue({[id]: value.trim()}, value);
-      } else {
-        getValue({[id]: ''}, value);
-      }
-    });
-  }
-
-  inputBlur = (e) => {
-    const required = this.requiredObj && this.requiredObj.required || null;
-    const {value} = this.state;
-    if (required && !value.trim()) {
-      this.props.setError(this.requiredObj.message)
+    if (props.setError) {
+      props.setError(errorText);
     }
-    const {onBlur} = this.props;
-    if (onBlur) onBlur(e);
+    setValue(value);
+    if (errorText === '') {
+      props.getValue({[`${props.id}`]: value.trim()}, value);
+    } else {
+      props.getValue({[`${props.id}`]: ''}, value);
+    }
   }
 
-  inputFocus = (e) => {
-    const {onFocus} = this.props;
-    if (onFocus) onFocus(e);
+  const inputBlur = (e) => {
+    const required = ruleObj.requiredObj && ruleObj.requiredObj.required || null;
+    if (required && !value.trim()) {
+      if (props.setError) {
+        props.setError(ruleObj.requiredObj.message);
+      }
+    }
+    if (props.onBlur) props.onBlur(e);
   }
 
-  render() {
-    const {value} = this.state;
+  useEffect(() => {
+    setRuleObj(setRule(props.rule));
+  }, [props.rule])
 
-    const {cls, disabled, getValue, initialValue, setError, onBlur, onFocus, ...other,} = this.props;
-    return (
-      <input value={value} className={classnames('form-input', cls, {disabled})}
-             onBlur={this.inputBlur} onFocus={this.inputFocus} onChange={this.inputHandler}
-             {...other}
-      />
-    )
-  }
+  return (
+    <input value={value} className={classnames('form-input', props.cls, {disabled: props.disabled})}
+           onBlur={inputBlur} onFocus={props.onFocus} onChange={inputHandler}
+           {...props.other}
+    />
+  )
 }
 
 Input.propTypes = {
@@ -105,7 +81,7 @@ Input.propTypes = {
   placeholder: PropTypes.string,
   onBlur: PropTypes.func,
   onFocus: PropTypes.func,
-  initialValue: PropTypes.string,
+  initialValue: PropTypes.any,
   type: PropTypes.string,
   //checkZero: PropTypes.bool,
 };
@@ -113,7 +89,6 @@ Input.propTypes = {
 Input.defaultProps = {
   placeholder: '请输入',
   type: 'text',
-  //checkZero: true
 }
 
 export default Input;
