@@ -1,43 +1,39 @@
 /**
  * 模糊搜索列表
  */
-import React, {Component} from 'react';
+import React, {Component, useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 import './autoComplete.less';
-class AutoComplete extends Component {
+const AutoComplete = (props) => {
+  const [list, setList] = useState(props.list);
+  const [searchValue, setSearchValue] = useState('');
+  const [selectValue, setSelectValue] = useState(props.selectValue);
+  const [searchAni, setSearchAni] = useState(false);
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      list: [],
-      searchList: [],
-      searchValue: '',
-      selectValue: '',
-      searchAni: false,
-    };
+  useEffect(() => {
+    setList(props.list);
+    setSelectValue(props.selectValue);
+  }, [props.list, props.selectValue]);
+
+  useEffect(() => {
+    document.documentElement.style.backgroundColor = '#fff';
+    return () => {
+      document.documentElement.style.backgroundColor = '#fefefe';
+    }
+  }, []);
+
+  const selectedHandler = (item) => {
+    return () => {
+      const {optKey, onSelect} = props;
+      setSelectValue(item[optKey])
+      if (onSelect) onSelect(item);
+    }
   }
 
-  componentWillMount() {
-    const {list, selectValue} = this.props;
-    this.setState({list, selectValue});
-    document.documentElement.style.background = '#FFF';
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const {list, selectValue} = nextProps;
-    this.setState({list, selectValue});
-  }
-
-  componentWillUnmount() {
-    document.documentElement.style.background = '#F7F8FA';
-  }
-
-  renderSelectOptions = () => {
-    const {list, searchValue, selectValue} = this.state;
-    const {optName, optKey, noMatchText, noListText} = this.props;
-
+  const renderSelectOptions = () => {
+    const {optName, optKey, noMatchText, noListText} = props;
     const renderList = [];
     if (searchValue) {
       list.forEach((item) => {
@@ -50,7 +46,7 @@ class AutoComplete extends Component {
           const text = item[optName];
           const idx = text.indexOf(searchValue);
 
-          return (<li key={item[optKey]} onClick={this.selectedHandler(item)} className="bor-bottom1px flex verticalCenter">
+          return (<li key={item[optKey]} onClick={selectedHandler(item)} className="bor-bottom1px flex verticalCenter">
             <p className="select-li-text flexBox">{text.substr(0, idx)}
               <span className="color-main">{searchValue}</span>
               {text.substr(idx + searchValue.length)}
@@ -65,7 +61,7 @@ class AutoComplete extends Component {
     if (list) {
       return list.map((item) => {
         return (
-          <li key={item[optKey]} onClick={this.selectedHandler(item)} className="bor-bottom1px flex verticalCenter">
+          <li key={item[optKey]} onClick={selectedHandler(item)} className="bor-bottom1px flex verticalCenter">
             <p className="select-li-text flexBox">{item[optName]}</p>
             {String(selectValue) === String(item[optKey]) ? <i className="icon icon-list-selected"></i> : null}
           </li>
@@ -75,27 +71,8 @@ class AutoComplete extends Component {
     return <p className="center" style={{margin: '3rem auto'}}>{noListText}</p>
   }
 
-  selectedHandler = (item) => {
-    return () => {
-      const {optKey, onSelect} = this.props;
-      this.setState({
-        selectValue: item[optKey]
-      })
-
-      if (onSelect) onSelect(item);
-    }
-  }
-
-  searchInput = (e) => {
-    const searchValue = e.target.value;
-    this.setState({
-      searchValue
-    });
-  }
-
-  finishInput = () => {
-    const {searchValue} = this.state;
-    const {onSelect, inputKey, emptyFunc} = this.props;
+  const finishInput = () => {
+    const {onSelect, inputKey, emptyFunc} = props;
     if (searchValue) {
       if (onSelect) {
         onSelect({[inputKey]: searchValue})
@@ -105,46 +82,27 @@ class AutoComplete extends Component {
     }
   }
 
-  inputFocus = () => {
-    this.setState({
-      searchAni: true
-    })
-  }
-
-  inputBlur = () => {
-    this.setState({
-      searchAni: false
-    })
-  }
-
-  clearSearch = () => {
-    this.setState({
-      searchValue: '',
-    })
-  }
-
-  render() {
-    const {searchPlaceHolder, className, needFinish} = this.props;
-    const {searchValue, searchAni} = this.state;
-    return (
-      <div className={classnames('select-page-wrap', className)}>
-        <div className="flex verticalCenter">
-          <div className="flex search-wrap verticalCenter flexBox">
-            <i className={classnames('icon icon-search', {searchAni})}></i>
-            <input className="search-input flexBox" type="text" onChange={this.searchInput} onFocus={this.inputFocus}  onBlur={this.inputBlur}
-                   placeholder={searchPlaceHolder}
-                   value={searchValue}
-            />
-            <i className="icon icon-search-close" onClick={this.clearSearch}></i>
-          </div>
-          {needFinish && <span className="finish-btn" onClick={this.finishInput}>完成</span>}
+  return (
+    <div className={classnames('select-page-wrap', props.className)}>
+      <div className="flex verticalCenter">
+        <div className="flex search-wrap verticalCenter flexBox">
+          <i className={classnames('icon icon-search', {searchAni})}></i>
+          <input className="search-input flexBox" type="text"
+                 onChange={(e) => setSearchValue(e.target.value)}
+                 onFocus={() => setSearchAni(true)}
+                 onBlur={() => setSearchAni(false)}
+                 placeholder={props.searchPlaceHolder}
+                 value={searchValue}
+          />
+          <i className="icon icon-search-close" onClick={() => setSearchValue('')}></i>
         </div>
-        <ul className="search-result">
-          {this.renderSelectOptions()}
-        </ul>
+        {props.needFinish && <span className="finish-btn" onClick={finishInput}>完成</span>}
       </div>
-    )
-  }
+      <ul className="search-result">
+        {renderSelectOptions()}
+      </ul>
+    </div>
+  )
 }
 
 AutoComplete.propTypes = {

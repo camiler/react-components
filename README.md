@@ -7,6 +7,10 @@ These react UI components for mobile page are used in my work. It may just suita
 
 ## How to use
 `import {Button, PayPassword, ...} from 'react-app-component-box' ` 
+
+## demo
+`npm run start`
+`http://localhost:8080/app`
  
 1、[FormItem](https://github.com/camiler/react-components/tree/master/src/components/formItem)
 ```js

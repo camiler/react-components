@@ -16,10 +16,9 @@ const App = (props) => {
       }
     }
     if (state.selectId === 1) {
-      console.log('set')
       updateState({needReset: true});
     }
-  }, [state]);
+  }, [state.loading, state.selectId]);
 
   const updateState = (obj) => {
     console.log(obj)
